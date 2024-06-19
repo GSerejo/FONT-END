@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;1,400;1,500&display=swap');
+* {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background-color: #000000;
+     
+}
+
+/* Estilos para a página de login */
+.login-container {
+    max-width: 500px;
+    margin: 250px auto;
+    padding: 50px;
+    background-color: #262626;
+    border-radius: 30px;
+    text-align: center;
+    z-index: 0;
+}
+
+.login-container h2 {
+    position: relative;
+    margin-bottom: 30px;
+    color: #fff;
+    
+}
+
+
+.login-container input[type="text"],
+.login-container input[type="password"],
+.login-container button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+}
+
+.login-container button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity .5s;
+    
+}
+
+.login-container button:hover {
+    background-color: #45a049;
+    opacity: .8;
+}
+.bola {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+  }
+  .animation-gif {
+    position:absolute;
+    top: 0px; 
+    right: 45%;
+    left: 45%;
+    width: 200px;
+    height: 200px;
+    z-index: 1; 
+}
+
+
+  
+
+  

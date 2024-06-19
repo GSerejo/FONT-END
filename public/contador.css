@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;1,400;1,500&display=swap');
+
+:root {
+    --primary-color: #3730a3;
+    --background-color: #18181b;
+    --text-color: #fff;
+    --button-bg-color: #18181b;
+    --hover-opacity: 0.8;
+    --border-radius: 5px;
+}
+
+* {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 0 15%;
+}
+
+.logo-projeto {
+    width: 300px;
+    position: absolute;
+    top: 20px;
+    left: calc(50% - 150px);
+    z-index: 1;
+}
+
+.counter-container {
+    background-color: #262626;
+    padding: 1.5rem;
+    border-radius: 50px;
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#counter-left, #counter-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#counter-left div, #counter-right div {
+    display: flex;
+    align-items: center;
+}
+
+#value-left, #value-right {
+    font-size: 8rem;
+    color: var(--text-color);
+    min-width: 10rem;
+    text-align: center;   
+}
+
+button {
+    border: none;
+    border-radius: 20px;
+    color: var(--text-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity .3s;
+}
+
+button:hover {
+    opacity: var(--hover-opacity);
+}
+
+.count-button {
+    width: 6rem;
+    height: 6rem;
+    font-size: 3rem;
+    background-color: var(--button-bg-color);
+    margin: 0 1rem;
+}
+
+#reset-left, #reset-right {
+    width: 100%;
+    font-size: 1.8rem;
+    background-color: var(--primary-color);
+    padding: .2rem 0;
+    margin-top: 1rem;
+}
+
+input[type="text"], #country-left, #country-right {
+    width: 100%;
+    padding: 0.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    text-align: center;
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+input[type="text"]:focus, button:focus {
+    outline: 2px solid var(--primary-color);
+}
+
+#flag-container-left img, #flag-container-right img {
+    max-width: 64px;
+    max-height: 48px;
+    margin-top: 0.5rem;
+}
+
+.menu-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2;
+}
+
+#checkbox-menu {
+    display: none;
+}
+
+.hamburger {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+}
+
+.hamburger span {
+    display: block;
+    height: 5px;
+    width: 100%;
+    border-radius: 30px;
+    background: var(--primary-color);
+    transition: 0.25s ease-in-out;
+}
+
+#checkbox-menu:checked + .hamburger span:nth-child(1) {
+    transform: rotate(-45deg);
+    top: 8px;
+    position: relative;
+}
+
+#checkbox-menu:checked + .hamburger span:nth-child(2) {
+    opacity: 0; 
+}
+
+#checkbox-menu:checked + .hamburger span:nth-child(3) {
+    transform: rotate(45deg);
+    top: -8px;
+    position: relative;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: #262626;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+#checkbox-menu:checked ~ .menu {
+    display: block;
+}
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-button {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0;
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.selected-option {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+/* Esconda os campos do jogador 2 por padrão */
+.player2-container {
+    display: none;
+}
+
+/* Mostre os campos do jogador 2 na modalidade Duplas */
+.show-player2 .player2-container {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        padding: 0 5%;
+    }
+
+    .counter-container {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+}
