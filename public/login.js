@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
           if (username === 'juiz' && password === '123') {
               alert('Login bem-sucedido!');
-              window.location.href = 'home.html'; 
+              window.location.href = 'http://localhost:3000/cadastro.html'; 
           } else {
               alert('Nome de usuário ou senha incorretos.');
               usernameInput.classList.add('invalid');

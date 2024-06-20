@@ -19,10 +19,10 @@
         </label>
         <div class="menu">
             <div class="options-container">
-                <button class="menu-button" data-option="Masculino" onclick="navigateTo('masculino.html')">Masculino</button>
-                <button class="menu-button" data-option="Feminino" onclick="navigateTo('feminino.html')">Feminino</button>
-                <button class="menu-button" data-option="Misto" onclick="navigateTo('misto.html')">Misto</button>
-                <button class="menu-button" data-option="Duplas" onclick="navigateTo('duplas.html')">Duplas</button>
+                <button class="menu-button" data-option="Masculino">Masculino</button>
+                <button class="menu-button" data-option="Feminino">Feminino</button>
+                <button class="menu-button" data-option="Misto">Misto</button>
+                <button class="menu-button" data-option="Duplas">Duplas</button>
             </div>
         </div>
     </div>
@@ -61,6 +61,21 @@
         <div id="selected-option-right" class="selected-option">Selecionado: Nenhum</div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Botão para enviar dados da partida -->
+    <button id="submit-game-data">Enviar Dados da Partida</button>
+
+    <script src="contador.js"></script>
+
+    <script>
+        // Adicionar event listeners para os botões de menu
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.menu-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const option = button.getAttribute('data-option').toLowerCase();
+                    window.location.href = `${option}.html`; // Navega para a página correspondente
+                });
+            });
+        });
+    </script>
 </body>
 </html>

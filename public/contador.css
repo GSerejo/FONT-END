@@ -217,3 +217,24 @@ input[type="text"]:focus, button:focus {
         margin-bottom: 1rem;
     }
 }
+#submit-game-data {
+    position: absolute;
+    z-index: 1; /* Ajuste conforme necessário */
+    top: 50px; /* Exemplo de ajuste vertical */
+    right: 100px; /* Exemplo de ajuste horizontal */
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    font-size: 1.5rem;
+    width: 19%;
+    padding: .2rem 0;
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+#submit-game-data:hover {
+    background-color: darken(var(--primary-color), 500%);
+}
+

@@ -1,4 +1,4 @@
-// public/cadastro.js
+// cadastro.js
 document.getElementById('cadastro-form').addEventListener('submit', function(event) {
     event.preventDefault(); // Impede o comportamento padrão do formulário
 
@@ -12,6 +12,11 @@ document.getElementById('cadastro-form').addEventListener('submit', function(eve
         return;
     }
 
+    // Desativar o botão de envio
+    var submitButton = document.getElementById('submit-button');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Enviando...';
+
     // Envia os dados para o servidor usando Fetch
     fetch('/cadastrar-atleta', {
         method: 'POST',
@@ -21,6 +26,9 @@ document.getElementById('cadastro-form').addEventListener('submit', function(eve
         body: JSON.stringify({ nome: nome, pais: pais }) // Converte os dados para JSON
     })
     .then(response => {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Cadastrar';
+
         if (!response.ok) { // Verifica se a resposta não está OK
             throw new Error('Erro na resposta do servidor');
         }
@@ -28,6 +36,7 @@ document.getElementById('cadastro-form').addEventListener('submit', function(eve
     })
     .then(data => {
         alert('Cadastro realizado com sucesso: ' + data); // Exibe a resposta do servidor
+        document.getElementById('cadastro-form').reset(); // Limpa o formulário
     })
     .catch(error => {
         console.error('Erro:', error); // Exibe qualquer erro no console
