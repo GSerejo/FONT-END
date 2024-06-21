@@ -1,9 +1,8 @@
-// database.js
-require('dotenv').config();
+// init_db.js
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-const dbFile = process.env.DB_FILE || path.join(__dirname, 'path_to_your_database.db');
+const dbFile = path.join(__dirname, 'path_to_your_database.db');
 const db = new sqlite3.Database(dbFile);
 
 // Criação das tabelas se não existirem
@@ -29,6 +28,5 @@ db.serialize(() => {
   )`);
 
   console.log("Tabelas criadas com sucesso!");
+  db.close();
 });
-
-module.exports = db;
