@@ -1,6 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Função para buscar a bandeira de um país
-    async function fetchCountryFlag(countryCode) {
+    // Função para buscar jogadores do banco de dados
+    async function fetchPlayers() {
+        try {
+            const response = await fetch('/get-players'); // Rota a ser implementada no servidor para buscar os jogadores
+            if (!response.ok) {
+                throw new Error('Não foi possível obter a lista de jogadores');
+            }
+            return response.json();
+        } catch (error) {
+            console.error('Erro ao buscar jogadores:', error.message);
+            return [];
+        }
+    }
+
+    // Função para preencher um <select> com opções de jogadores
+    function fillPlayerOptions(selectElement, players) {
+        selectElement.innerHTML = '<option value="">Selecione um jogador</option>';
+        players.forEach(player => {
+            const option = document.createElement('option');
+            option.value = player.id; // Assume que cada jogador tem um ID único no banco de dados
+            option.textContent = player.nome; // Nome do jogador
+            selectElement.appendChild(option);
+        });
+    }
+
+    // Inicialização dos <select> com os jogadores disponíveis
+    async function initializePlayerSelects() {
+        const players = await fetchPlayers(); // Busca os jogadores do servidor
+        const playerSelects = document.querySelectorAll('.player-select');
+        playerSelects.forEach(select => fillPlayerOptions(select, players));
+    }
+
+    initializePlayerSelects(); // Chama a função de inicialização ao carregar a página
+
+    // Função para exibir a bandeira na tela
+    async function fetchCountryFlag(countryCode, flagContainer) {
         try {
             const response = await fetch(`https://flagcdn.com/64x48/${countryCode.toLowerCase()}.png`);
             if (!response.ok) {
@@ -27,114 +61,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Função para configurar um contador
-    function setupCounter(config) {
-        let count = 0;
-
-        const updateValue = () => {
-            config.valueElement.textContent = count;
-        };
-
-        const togglePlayer2Input = (show) => {
-            const player2Container = document.getElementById(`player2-container-${config.idSuffix}`);
-            player2Container.style.display = show ? 'block' : 'none';
-        };
-
-        config.plusButton.addEventListener('click', () => {
-            count++;
-            updateValue();
+    // Função para atualizar a interface com base no modo de jogo selecionado
+    function updateGameMode(mode) {
+        const isDoubles = mode === 'duplas';
+        const player2Containers = document.querySelectorAll('.player2-container');
+        player2Containers.forEach(container => {
+            container.style.display = isDoubles ? 'block' : 'none';
         });
-
-        config.minusButton.addEventListener('click', () => {
-            if (count > 0) {
-                count--;
-                updateValue();
-            }
-        });
-
-        config.resetButton.addEventListener('click', () => {
-            count = 0;
-            updateValue();
-        });
-
-        config.titleElement.addEventListener('input', () => {
-            config.titleElement.value = config.titleElement.value.trim(); // Remove espaços em branco extras
-            config.titleElement.dataset.title = config.titleElement.value; // Atualiza o atributo "data-title"
-        });
-
-        config.countryInput.addEventListener('keyup', async (event) => {
-            const countryCode = event.target.value.toUpperCase(); // Transforma o texto em maiúsculas
-            if (countryCode.length === 2) { // Verifica se o código tem duas letras
-                await displayCountryFlag(countryCode, config.flagContainer);
-            }
-        });
-
-        document.querySelectorAll('.menu-button').forEach(button => {
-            button.addEventListener('click', (event) => {
-                // Atualiza o texto do elemento selecionado
-                document.querySelector(`#${config.selectedOptionElement.id}`).textContent = `Selecionado: ${event.target.dataset.option}`;
-
-                // Atualiza a visibilidade do segundo jogador conforme necessário
-                const option = event.target.dataset.option.toLowerCase();
-                togglePlayer2Input(option === 'duplas');
-            });
-        });
-
-        // Inicializa o valor do contador
-        updateValue();
-    }
-
-    // Função para enviar os dados da partida
-    async function submitGameData() {
-        const player1 = {
-            name: document.getElementById('title-left').value.trim(),
-            country: document.getElementById('country-left').value.trim(),
-            points: parseInt(document.getElementById('value-left').textContent)
-        };
-
-        const player2 = {
-            name: document.getElementById('title-right').value.trim(),
-            country: document.getElementById('country-right').value.trim(),
-            points: parseInt(document.getElementById('value-right').textContent)
-        };
-
-        // Verifica se todos os campos obrigatórios estão preenchidos
-        if (!player1.name || !player1.country || !player2.name || !player2.country) {
-            alert('Por favor, preencha todos os campos obrigatórios.');
-            return;
-        }
-
-        // Seleciona o modo da partida
-        const selectedButton = document.querySelector('.menu-button.selected');
-        const mode = selectedButton ? selectedButton.getAttribute('data-option').toLowerCase() : '';
-
-        const winner = player1.points > player2.points ? player1.name : player2.name;
-
-        const gameData = {
-            player1,
-            player2,
-            winner,
-            mode
-        };
-
-        try {
-            const response = await fetch('/submit-game-data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(gameData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Erro ao enviar os dados da partida');
-            }
-
-            alert('Dados da partida enviados com sucesso');
-        } catch (error) {
-            console.error('Erro:', error);
-            alert('Erro ao enviar os dados da partida');
-        }
     }
 
     // Configurações para os contadores
@@ -148,6 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
             titleElement: document.getElementById('title-left'),
             countryInput: document.getElementById('country-left'),
             flagContainer: document.getElementById('flag-container-left'),
+            player2TitleElement: document.getElementById('title-left-player2'),
+            player2CountryInput: document.getElementById('country-left-player2'),
             selectedOptionElement: document.getElementById('selected-option-left')
         },
         {
@@ -159,6 +94,8 @@ document.addEventListener('DOMContentLoaded', function() {
             titleElement: document.getElementById('title-right'),
             countryInput: document.getElementById('country-right'),
             flagContainer: document.getElementById('flag-container-right'),
+            player2TitleElement: document.getElementById('title-right-player2'),
+            player2CountryInput: document.getElementById('country-right-player2'),
             selectedOptionElement: document.getElementById('selected-option-right')
         }
     ];
@@ -168,4 +105,145 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Adicionar evento ao botão de envio de dados da partida
     document.getElementById('submit-game-data').addEventListener('click', submitGameData);
+
+    // Adicionar evento aos botões do menu para mudar o modo de jogo
+    document.querySelectorAll('.menu-button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const mode = event.target.dataset.option.toLowerCase();
+            updateGameMode(mode);
+            // Atualizar o texto do elemento selecionado
+            document.querySelectorAll('.selected-option').forEach(element => {
+                element.textContent = `Selecionado: ${event.target.textContent}`;
+            });
+        });
+    });
+
+    // Função para configurar um contador específico
+    function setupCounter(config) {
+        const {
+            idSuffix,
+            valueElement,
+            plusButton,
+            minusButton,
+            resetButton,
+            titleElement,
+            countryInput,
+            flagContainer,
+            player2TitleElement,
+            player2CountryInput,
+            selectedOptionElement
+        } = config;
+
+        // Exemplo de função para incrementar e decrementar o contador
+        function increment() {
+            let currentValue = parseInt(valueElement.textContent);
+            valueElement.textContent = currentValue + 1;
+        }
+
+        function decrement() {
+            let currentValue = parseInt(valueElement.textContent);
+            if (currentValue > 0) {
+                valueElement.textContent = currentValue - 1;
+            }
+        }
+
+        // Limpar contador
+        function reset() {
+            valueElement.textContent = '0';
+            titleElement.value = '';
+            countryInput.value = '';
+            flagContainer.innerHTML = '';
+            player2TitleElement.value = '';
+            player2CountryInput.value = '';
+            selectedOptionElement.textContent = `Selecionado: Nenhum`;
+        }
+
+        // Adicionar eventos aos botões
+        plusButton.addEventListener('click', increment);
+        minusButton.addEventListener('click', decrement);
+        resetButton.addEventListener('click', reset);
+    }
+
+    // Função para enviar dados da partida
+    async function submitGameData() {
+        // Coletar dados dos contadores e campos de entrada
+        const equipe1Jogador1Nome = document.getElementById('title-left').value;
+        const equipe1Jogador1Pais = document.getElementById('country-left').value;
+        const equipe1Jogador2Nome = document.getElementById('title-left-player2').value;
+        const equipe1Jogador2Pais = document.getElementById('country-left-player2').value;
+
+        const equipe2Jogador1Nome = document.getElementById('title-right').value;
+        const equipe2Jogador1Pais = document.getElementById('country-right').value;
+        const equipe2Jogador2Nome = document.getElementById('title-right-player2').value;
+        const equipe2Jogador2Pais = document.getElementById('country-right-player2').value;
+
+        const equipe1Pontuacao = parseInt(document.getElementById('value-left').textContent);
+        const equipe2Pontuacao = parseInt(document.getElementById('value-right').textContent);
+
+        const mode = document.querySelector('.selected-option').textContent.toLowerCase();
+        const winner = determineWinner(equipe1Pontuacao, equipe2Pontuacao);
+
+        // Montar objeto com os dados da partida
+        const data = {
+            equipe1: {
+                jogador1: {
+                    nome: equipe1Jogador1Nome,
+                    pais: equipe1Jogador1Pais
+                },
+                jogador2: {
+                    nome: equipe1Jogador2Nome,
+                    pais: equipe1Jogador2Pais
+                }
+            },
+            equipe2: {
+                jogador1: {
+                    nome: equipe2Jogador1Nome,
+                    pais: equipe2Jogador1Pais
+                },
+                jogador2: {
+                    nome: equipe2Jogador2Nome,
+                    pais: equipe2Jogador2Pais
+                }
+            },
+            pontuacao: {
+                equipe1: equipe1Pontuacao,
+                equipe2: equipe2Pontuacao
+            },
+            mode: mode,
+            winner: winner
+        };
+
+        try {
+            // Enviar os dados da partida para o servidor
+            const response = await fetch('/submit-game-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao enviar os dados da partida');
+            }
+
+            console.log('Dados da partida enviados com sucesso');
+
+            // Aqui você pode adicionar lógica para mostrar mensagem de sucesso, reiniciar campos, etc.
+
+        } catch (error) {
+            console.error('Erro ao enviar os dados da partida:', error.message);
+        }
+    }
+
+    // Função para determinar o vencedor da partida
+    function determineWinner(pontuacaoEquipe1, pontuacaoEquipe2) {
+        if (pontuacaoEquipe1 > pontuacaoEquipe2) {
+            return 'equipe1';
+        } else if (pontuacaoEquipe2 > pontuacaoEquipe1) {
+            return 'equipe2';
+        } else {
+            return 'empate'; // Em caso de empate, você pode ajustar conforme necessário
+        }
+    }
 });

@@ -13,12 +13,12 @@ document.getElementById('cadastro-form').addEventListener('submit', function(eve
     }
 
     // Desativar o botão de envio
-    var submitButton = document.getElementById('submit-button');
+    var submitButton = document.querySelector('button[type="submit"]');
     submitButton.disabled = true;
     submitButton.textContent = 'Enviando...';
 
     // Envia os dados para o servidor usando Fetch
-    fetch('/cadastrar-atleta', {
+    fetch('http://localhost:3000/cadastrar-atleta', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json' // Define o tipo de conteúdo como JSON

@@ -29,11 +29,12 @@
 
     <!-- Display da esquerda -->
     <div id="counter-left" class="counter-container">
-        <input type="text" id="title-left" placeholder="Equipe1/Jogador1">
-        <input type="text" id="country-left" placeholder="Sigla do País">
+        <input type="text" id="title-left" placeholder="Equipe1/Jogador1" >
+        <input type="text" id="country-left" placeholder="Sigla do País" >
         <div id="flag-container-left"></div>
         <div id="player2-container-left" class="player2-container">
-            <input type="text" id="title-left-player2" placeholder="Jogador2">
+            <input type="text" id="title-left-player2" placeholder="Jogador2" >
+            <input type="text" id="country-left-player2" placeholder="Sigla do País">
         </div>
         <div>
             <button id="plus-left" class="count-button">+</button>
@@ -46,11 +47,12 @@
     
     <!-- Display da direita -->
     <div id="counter-right" class="counter-container">
-        <input type="text" id="title-right" placeholder="Equipe2/Jogador2">
-        <input type="text" id="country-right" placeholder="Sigla do País">
+        <input type="text" id="title-right" placeholder="Equipe2/Jogador2" >
+        <input type="text" id="country-right" placeholder="Sigla do País" >
         <div id="flag-container-right"></div>
         <div id="player2-container-right" class="player2-container">
             <input type="text" id="title-right-player2" placeholder="Jogador2">
+            <input type="text" id="country-right-player2" placeholder="Sigla do País">
         </div>
         <div>
             <button id="plus-right" class="count-button">+</button>
@@ -65,17 +67,5 @@
     <button id="submit-game-data">Enviar Dados da Partida</button>
 
     <script src="contador.js"></script>
-
-    <script>
-        // Adicionar event listeners para os botões de menu
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.menu-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const option = button.getAttribute('data-option').toLowerCase();
-                    window.location.href = `${option}.html`; // Navega para a página correspondente
-                });
-            });
-        });
-    </script>
 </body>
 </html>
