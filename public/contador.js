@@ -33,34 +33,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initializePlayerSelects(); // Chama a função de inicialização ao carregar a página
 
-    // Função para exibir a bandeira na tela
-    async function fetchCountryFlag(countryCode, flagContainer) {
-        try {
-            const response = await fetch(`https://flagcdn.com/64x48/${countryCode.toLowerCase()}.png`);
-            if (!response.ok) {
-                throw new Error('Não foi possível encontrar a bandeira');
-            }
-            return response.url;
-        } catch (error) {
-            console.error('Erro ao buscar a bandeira:', error.message);
-            return null;
+   // Função para buscar a bandeira de um país
+   async function fetchCountryFlag(countryCode) {
+    try {
+        const response = await fetch(`https://flagcdn.com/64x48/${countryCode.toLowerCase()}.png`);
+        if (!response.ok) {
+            throw new Error('Não foi possível encontrar a bandeira');
         }
+        return response.url;
+    } catch (error) {
+        console.error('Erro ao buscar a bandeira:', error.message);
+        return null;
     }
-
+}
     // Função para exibir a bandeira na tela
-    async function displayCountryFlag(countryCode, flagContainer) {
-        flagContainer.innerHTML = ''; // Limpa o conteúdo anterior
+    async function displayCountryFlag(countryCode, flagContainerId) {
+        const flagContainer = document.getElementById(flagContainerId);
+        flagContainer.innerHTML = ''; // Limpar o conteúdo anterior
         const flagUrl = await fetchCountryFlag(countryCode);
         if (flagUrl) {
             const flagImg = document.createElement('img');
             flagImg.src = flagUrl;
-            flagImg.alt = `Bandeira de ${countryCode}`;
+            flagImg.alt = 'Bandeira do país';
             flagContainer.appendChild(flagImg);
-        } else {
-            flagContainer.textContent = 'Bandeira não encontrada';
-        }
+        } 
     }
-
     // Função para atualizar a interface com base no modo de jogo selecionado
     function updateGameMode(mode) {
         const isDoubles = mode === 'duplas';
@@ -117,6 +114,16 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+   // Adicionar eventos para os campos de país da equipe esquerda e direita
+   document.getElementById('country-left').addEventListener('input', function() {
+    const countryCode = this.value.trim().toLowerCase();
+    displayCountryFlag(countryCode, 'flag-container-left');
+});
+
+document.getElementById('country-right').addEventListener('input', function() {
+    const countryCode = this.value.trim().toLowerCase();
+    displayCountryFlag(countryCode, 'flag-container-right');
+});
 
     // Função para configurar um contador específico
     function setupCounter(config) {
