@@ -1,4 +1,5 @@
 // cadastro.js
+
 document.getElementById('cadastro-form').addEventListener('submit', function(event) {
     event.preventDefault(); // Impede o comportamento padrão do formulário
 
@@ -42,4 +43,9 @@ document.getElementById('cadastro-form').addEventListener('submit', function(eve
         console.error('Erro:', error); // Exibe qualquer erro no console
         alert('Ocorreu um erro ao cadastrar. Por favor, tente novamente.'); // Alerta o usuário sobre o erro
     });
+});
+
+// Redirecionamento ao clicar no botão "Iniciar Partida"
+document.getElementById('iniciar-partida').addEventListener('click', function() {
+    window.location.href = 'http://localhost:3000/contador.html';
 });
